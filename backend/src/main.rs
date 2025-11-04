@@ -18,29 +18,13 @@ mod services;
 mod state;
 mod types;
 mod utils;
+mod middlewares;
+mod shutdown;
+
 use config::{ApiPaths, CONFIG};
 use state::AppState;
+use shutdown::shutdown_signal;
 
-async fn shutdown_signal() {
-    #[cfg(unix)]
-    {
-        use tokio::signal::unix::{SignalKind, signal};
-        let mut term = signal(SignalKind::terminate()).expect("listen SIGTERM");
-        let mut int = signal(SignalKind::interrupt()).expect("listen SIGINT");
-
-        tokio::select! {
-            _ = term.recv() => tracing::info!("SIGTERM received"),
-            _ = int.recv()  => tracing::info!("SIGINT received"),
-        }
-    }
-
-    #[cfg(not(unix))]
-    {
-        tokio::signal::ctrl_c()
-            .await
-            .expect("failed to install Ctrl+C handler");
-    }
-}
 
 #[tokio::main]
 async fn main() {
@@ -57,6 +41,7 @@ async fn main() {
                 .url(ApiPaths::OPENAPI_JSON, api::openapi::ApiDoc::openapi()),
         )
         .layer(TraceLayer::new_for_http())
+        .route_layer(axum::middleware::from_fn(middlewares::real_ip_layer))
         .with_state(state.clone());
 
     let allowed_origins: Vec<HeaderValue> = CONFIG
