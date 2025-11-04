@@ -1,0 +1,42 @@
+services:
+  backend:
+    build:
+      context: ./backend/
+      args:
+        BIN_NAME: RustLettreSMTP
+    image: rustlettresmtp:latest
+    env_file: ./backend/.env
+    ports:
+      - "8080:8080"
+    networks:
+      - default
+    environment:
+      LOG_FILE: /app/logs/email_sent.log
+      RUST_LOG: debug
+      # SMTP_USER: ...
+      # SMTP_PASSWORD: ...
+      # SMTP_SERVER: ...
+      # SMTP_PORT: ...
+      APP_PORT: "8080"
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
+
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    env_file: ./frontend/.env
+    ports:
+      - '5173:5173'
+    # environment:
+      # - VITE_YANDEX_MAP_API_KEY=a39e1a******************
+      # - VITE_APP_HOST=66df1552d3b3.ngrok-free.app
+    restart: always
+    networks:
+      - default
+
+networks:
+  default:
+    # external: false
+    driver: bridge

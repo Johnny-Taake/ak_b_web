@@ -1,0 +1,118 @@
+:root {
+  --page-max: 1300px;
+  --pad-x: clamp(16px, 4vw, 32px);
+  /* TODO: implement */
+  --content-max: 720px;
+  --measure: 68ch;
+
+  --h1: clamp(38px, 5.2vw, 56px);
+  --h2: clamp(28px, 4.2vw, 40px);
+  --h3: clamp(22px, 3.2vw, 28px);
+
+  --text-lg: clamp(20px, 2.1vw, 22px);
+  --text-md: clamp(18px, 1.8vw, 20px);
+  --text-sm: clamp(16px, 1.5vw, 20px);
+  --text-xs: clamp(14px, 1.2vw, 16px);
+}
+
+html {
+  color: var(--c-text-strong);
+  background: var(--c-bg);
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  line-height: 1.65;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  margin: 0;
+}
+
+.container {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--pad-x);
+}
+
+.section {
+  padding-inline: 0;
+}
+
+.h1 {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  font-size: var(--h1);
+  line-height: 1.05;
+  letter-spacing: .18px;
+  color: var(--c-text-strong);
+}
+
+.h2 {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+  font-size: var(--h2);
+  line-height: 1.08;
+  letter-spacing: .18px;
+  color: var(--c-text-strong);
+}
+
+.h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--h3);
+  line-height: 1.15;
+  letter-spacing: .12px;
+  color: var(--c-text-strong);
+}
+
+.text-md {
+  font-size: var(--text-md);
+  line-height: 1.65;
+}
+
+.text-lg {
+  font-size: var(--text-lg);
+  line-height: 1.55;
+}
+
+.lead {
+  font-size: clamp(18px, 2.2vw, 22px);
+  line-height: 1.55;
+  color: var(--c-text-strong);
+}
+
+.eyebrow {
+  font: 600 12px/1 var(--font-sans);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--blue-primary);
+}
+
+.muted {
+  color: var(--c-text-muted);
+}
+
+.caption {
+  font: 500 12px/1.4 var(--font-sans);
+  color: var(--c-text-muted);
+}
+
+.title-wrap {
+  max-width: 660px;
+}
+
+.stack>*+* {
+  margin-top: 1rem;
+}
+
+a {
+  color: var(--blue-link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  opacity: .9;
+}

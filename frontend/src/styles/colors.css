@@ -1,0 +1,15 @@
+:root {
+    --black: #000000;
+    --c-text: #0f172a;
+    --white: #ffffff;
+    --blue-primary: #226690;
+    --blue-link: #1e3a8a;
+    --gray-light: #d1d5db;
+
+    --c-text-strong: var(--c-text);
+    --c-text-muted: #303030;
+    --c-text-inverse: var(--white);
+    --c-bg: #ffffff;
+    --c-surface: #404142;
+    --c-border: rgba(2, 6, 23, .08);
+}
