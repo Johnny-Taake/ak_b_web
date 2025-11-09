@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { computed, ref, nextTick, watch } from "vue";
+import { computed, ref, nextTick, watch, onMounted, onBeforeUnmount } from "vue";
 import { useGlassNav } from "@/composables/useGlassNav";
 
 type NavItem = { label: string; target: string };
+
 const items: NavItem[] = [
   { label: "Главная", target: "#home" },
   { label: "О компании", target: "#about" },
-  { label: "Преимущества", target: "#advantages" },
   { label: "Услуги", target: "#services" },
+  { label: "Преимущества", target: "#advantages" },
   { label: "Отзывы", target: "#reviews" },
   { label: "FAQ", target: "#faq" },
   { label: "Контакты", target: "#contacts" },
@@ -24,6 +25,21 @@ const cssVars = computed(() => ({
 }));
 
 const firstItemRef = ref<HTMLButtonElement | null>(null);
+const sectionRefs = ref<Record<string, HTMLElement>>({});
+
+onMounted(() => {
+  items.forEach(item => {
+    const el = document.querySelector(item.target);
+    if (el) {
+      sectionRefs.value[item.target] = el as HTMLElement;
+    }
+  });
+});
+
+onBeforeUnmount(() => {
+  sectionRefs.value = {};
+});
+
 watch(isOpen, async (v) => {
   if (!v) return;
   await nextTick();
@@ -31,8 +47,10 @@ watch(isOpen, async (v) => {
 });
 
 function goTo(hash: string) {
-  const el = document.querySelector(hash);
-  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  const el = sectionRefs.value[hash];
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
   close();
 }
 </script>
@@ -44,11 +62,15 @@ function goTo(hash: string) {
         <header class="modal__header">
           <h2 id="navTitle" class="modal__title">Меню</h2>
         </header>
-
         <div class="modal__content">
           <div class="menu">
-            <button v-for="(it, i) in items" :key="it.target" class="btn menu__btn" @click="goTo(it.target)"
-              :ref="i === 0 ? 'firstItemRef' : undefined">
+            <button
+              v-for="(it, i) in items"
+              :key="it.target"
+              class="btn menu__btn"
+              @click="goTo(it.target)"
+              :ref="i === 0 ? 'firstItemRef' : undefined"
+            >
               {{ it.label }}
             </button>
           </div>
